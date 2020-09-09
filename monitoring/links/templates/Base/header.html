@@ -1,0 +1,19 @@
+
+<header id="header">
+	<div id="header-inner">	
+		<div id="logo">
+			<h1><a href="#">Cool<span>Logo</span></a></h1>
+		</div>
+		<div id="top-nav">
+			<ul>
+				
+				{% if user.is_authenticated %}
+					<li class="rightalign"><a href="{% url 'teachers:logout' %}">Logout</a></li>
+					<li class="rightalign"><a href="{% url 'teachers:dashboard' %}">Dashboard</a></li>
+				{% else %}
+					<li class="rightalign"><a href="{% url 'teachers:login_page' %}">Login</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</header>

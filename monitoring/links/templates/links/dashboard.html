@@ -1,0 +1,76 @@
+{% extends "Base/base.html" %}
+
+{% block 'content_block' %}
+                <div id="error"></div>
+    <div class="Syncbutton">
+    <button class="checkLink" onclick="getLinkStatus()"> Check Link</button>
+    </div>
+				<div id="linkList">
+
+				</div>
+    <script type="application/javascript">
+
+    var links = JSON.parse('{{ links | safe}}');
+    var SyncLink = "{% url 'links:sync' %}";
+    var CHECKED_LINKS = [];
+
+    function  selectLink(e) {
+        if (e.checked) {
+            if (CHECKED_LINKS.indexOf(e.value) === -1) {
+                CHECKED_LINKS.push(e.value)
+            }
+        } else {
+            var index = CHECKED_LINKS.indexOf(e.value);
+            if (index !== -1) {
+                CHECKED_LINKS.splice(index, 1);
+            }
+        }
+        console.log(e, e.value, e.checked);
+
+    }
+
+    function isChecked(id) {
+        console.log((CHECKED_LINKS.indexOf((id).toString()) > -1));
+        return (CHECKED_LINKS.indexOf((id).toString()) > -1)
+    }
+
+    function displayList(links) {
+        var data = "<table><thead><tr><th>Id</th><th>Link</th><th>Status</th><th>Select to not update</th></tr></thead><tbody>";
+        for (var l  in  links) {
+            var color = "red";
+            if (links[l]['status'] == "200") {
+                color = "green";
+            }
+            data += "<tr><td>"+ links[l]['id']+" </td><td> "+ links[l]['link']+"</td><td style='color: "+color+"' > "+ links[l]['status']+"</td> <td  ><input type=\"checkbox\" name='sync' " + (isChecked(links[l]['id']) ? 'checked' : '')+" value='"+ links[l]['id']+"' onchange='selectLink(this)'> </td></tr>";
+        }
+        document.getElementById("linkList").innerHTML = data
+    }
+
+    function getLinkStatus() {
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText);
+                data = data["data"];
+                var newData = links;
+                for (var l in newData) {
+                    var item = data.filter(function(link) {
+                        return link["id"] == newData[l]["id"]
+                    });
+                    item = (item.length > 0 ) ?  item[0] : false;
+                    if (item) {
+                        newData[l] = item;
+                    }
+                }
+                displayList(newData);
+            }
+        };
+        var SynUrl = (CHECKED_LINKS.length> 0)?  SyncLink + "?notSync="+CHECKED_LINKS :  SyncLink;
+        request.open("GET", SynUrl);
+        request.send();
+    }
+    displayList(links);
+
+    </script>
+{% endblock 'content_block' %}
+

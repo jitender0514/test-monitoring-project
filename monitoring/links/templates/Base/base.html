@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- Template by html.am -->
+<html lang="en-US">
+	<head>
+        <meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		{% block head_section %}
+            <title>{{ page_title }}</title>
+            <style rel="stylesheet">
+                button {
+                    padding: 5px 20px;
+                }
+                table {
+                    margin: 0 auto;
+                    width: 60%;
+                    border: 1px solid;
+                    padding: 15px;
+                }
+                .checkLink {
+                    margin: 20px;
+                }
+                .Syncbutton {
+                    text-align: center;
+                }
+                table tr>td {
+                    text-align: center;
+                    border-top: 1px solid;
+                    padding: 10px;
+                }
+                #footer {
+                    background-color: darkgrey;
+                    text-align: center;
+                    position: fixed;
+                    width: 100%;
+                    bottom: 0;
+                }
+                #header {
+                    background-color: aquamarine;
+                    padding: 20px;
+                }
+                #logo, #top-nav {
+                    display: inline-block;
+                }
+                #top-nav {
+                    float: right;
+                }
+                #top-nav li {
+                    display: inline-block;
+                    margin: 0 15px;
+                }
+                #content_block {
+                    padding: 20px;
+                    min-height: 100%;
+                }
+                form>label {
+                    display: inline-block;
+                    width: 100px;
+                    text-align: right;
+                    padding: 10px;
+                }
+            form>input {
+                display: inline-block;
+                width: calc(100% - 230px);
+            }
+            form>button {
+                width: 300px;
+                margin-top: 20px;
+            }
+            form {
+    margin: 0 auto;
+    width: 600px;
+                text-align: center;
+}
+            </style>
+		{% endblock %}
+	</head>
+	<body>
+		<div class="body_page">
+			{% block main_body %}
+			{% include "./header.html" %}
+		
+	
+			<div id="content_block">
+				{% block 'content_block' %}
+				<div id="content-inner">
+					{% block 'sidebar' %}
+					{% endblock %}
+				</div>
+				{% endblock 'content_block' %}
+			</div>
+			{% include "./footer.html" %}
+			{% endblock %}
+		</div>
+	</body>
+</html>
